@@ -2,13 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  addDoc,
+} from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 
 interface Offer {
   id: string;
   cropId: string;
   companyId: string;
+  farmerId: string;
   offerPrice: string;
   status: string;
   createdAt: string;
@@ -18,32 +27,40 @@ interface Offer {
 export default function OfferDetailsPage() {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionMessage, setActionMessage] = useState("");
 
   const loadOffers = async (uid: string) => {
     const q = query(collection(db, "Offers"), where("farmerId", "==", uid));
     const snapshot = await getDocs(q);
 
-    const offerList: Offer[] = await Promise.all(
-      snapshot.docs.map(async (offerDoc) => {
-        const data = offerDoc.data();
-        let cropName = "Unknown crop";
+    const offerList: Offer[] = [];
 
-        try {
-          const cropSnap = await getDocs(
-            query(collection(db, "Crops"), where("__name__", "==", data.cropId))
-          );
-          if (!cropSnap.empty) {
-            cropName = cropSnap.docs[0].data().cropName;
-          }
-        } catch {}
+    for (const offerDoc of snapshot.docs) {
+      const data = offerDoc.data() as any;
+      let cropName = "Unknown crop";
 
-        return {
-          id: offerDoc.id,
-          ...data,
-          cropName,
-        } as Offer;
-      })
-    );
+      try {
+        const cropSnap = await getDocs(
+          query(collection(db, "Crops"), where("__name__", "==", data.cropId))
+        );
+        if (!cropSnap.empty) {
+          cropName = cropSnap.docs[0].data().cropName;
+        }
+      } catch (err) {
+        console.log("Crop lookup failed:", err);
+      }
+
+      offerList.push({
+        id: offerDoc.id,
+        cropId: data.cropId,
+        companyId: data.companyId,
+        farmerId: data.farmerId,
+        offerPrice: data.offerPrice,
+        status: data.status,
+        createdAt: data.createdAt,
+        cropName,
+      });
+    }
 
     offerList.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
     setOffers(offerList);
@@ -57,11 +74,33 @@ export default function OfferDetailsPage() {
     return () => unsubscribe();
   }, []);
 
-  const respondToOffer = async (offerId: string, newStatus: "accepted" | "rejected") => {
-    await updateDoc(doc(db, "Offers", offerId), { status: newStatus });
-    setOffers((prev) =>
-      prev.map((o) => (o.id === offerId ? { ...o, status: newStatus } : o))
-    );
+  const respondToOffer = async (offer: Offer, newStatus: "accepted" | "rejected") => {
+    setActionMessage("Updating...");
+
+    try {
+      await updateDoc(doc(db, "Offers", offer.id), { status: newStatus });
+
+      const notifText =
+        newStatus === "accepted"
+          ? `Your offer of PKR ${offer.offerPrice} on ${offer.cropName} was accepted.`
+          : `Your offer of PKR ${offer.offerPrice} on ${offer.cropName} was rejected.`;
+
+      await addDoc(collection(db, "Notifications"), {
+        userId: offer.companyId,
+        message: notifText,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+
+      setOffers((prev) =>
+        prev.map((o) => (o.id === offer.id ? { ...o, status: newStatus } : o))
+      );
+
+      setActionMessage("Done - notification sent to company.");
+    } catch (err: any) {
+      console.log("respondToOffer error:", err);
+      setActionMessage("Error: " + err.message);
+    }
   };
 
   return (
@@ -73,6 +112,12 @@ export default function OfferDetailsPage() {
             Back to Dashboard
           </a>
         </div>
+
+        {actionMessage ? (
+          <p className="bg-blue-100 text-blue-700 text-sm p-3 rounded mb-4">
+            {actionMessage}
+          </p>
+        ) : null}
 
         {loading ? (
           <p className="text-gray-500">Loading...</p>
@@ -103,13 +148,13 @@ export default function OfferDetailsPage() {
                 {offer.status === "pending" && (
                   <div className="flex gap-2 mt-3">
                     <button
-                      onClick={() => respondToOffer(offer.id, "accepted")}
+                      onClick={() => respondToOffer(offer, "accepted")}
                       className="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition"
                     >
                       Accept
                     </button>
                     <button
-                      onClick={() => respondToOffer(offer.id, "rejected")}
+                      onClick={() => respondToOffer(offer, "rejected")}
                       className="flex-1 bg-white border border-red-500 text-red-600 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition"
                     >
                       Reject
