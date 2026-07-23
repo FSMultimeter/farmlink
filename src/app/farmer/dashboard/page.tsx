@@ -79,7 +79,10 @@ export default function FarmerDashboard() {
           </a>
           <a href="/farmer/profile" className="bg-white rounded-2xl shadow-md p-4 text-center hover:bg-green-100 transition">
             <p className="font-medium text-green-800">Profile</p>
-          </a>
+          </a><a href="/farmer/offers" className="bg-white rounded-2xl shadow-md p-4 text-center hover:bg-green-100 transition">
+  <p className="font-medium text-green-800">Offers</p>
+</a>
+
         </div>
       </div>
     </div>
