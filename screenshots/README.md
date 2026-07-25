@@ -116,37 +116,37 @@ This keeps both advisors scoped to their actual jobs, explicitly forbids inventi
 
 
 
-![Splash screen](./screenshots/splash.png)
+![Splash screen](./pubic//screenshots/splash.png)
 
 
 
 
-![farmer-dashboard](./screenshots/farmer-dashboard.png)
+![farmer-dashboard](./pubic//screenshots/farmer-dashboard.png)
 
 
 
 
-![company-dashboard](./screenshots/company-dashboard.png)
+![company-dashboard](./pubic/screenshots/company-dashboard.png)
 
 
 
 
-![ai-advisor](./screenshots/ai-advisor.png)
+![ai-advisor](./pubic//screenshots/ai-advisor.png)
 
 
 
 
-![add-crop](./screenshots/add-crop.png)
+![add-crop](./pubic//screenshots/add-crop.png)
 
 
 
 
-![offers](./screenshots/offers.png)
+![offers](./pubic//screenshots/offers.png)
 
 
 
 
-![company-notifications](./screenshots/company-notifications.png)
+![company-notifications](./pubic//screenshots/company-notifications.png)
 
 
 
