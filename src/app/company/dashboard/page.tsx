@@ -90,6 +90,22 @@ export default function CompanyDashboard() {
       badge: unreadCount > 0 ? `${unreadCount} New` : null,
     },
     {
+  href: "/company/profile",
+  label: "Profile",
+  desc: "View and manage your company account",
+  icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0",
+  gradient: "from-[#388E3C] to-[#81C784]",
+  badge: null,
+},
+    {
+  href: "/company/ai-advisor",
+  label: "AI Advisor",
+  desc: "Get sourcing and pricing guidance",
+  icon: "M13 10V3L4 14h7v7l9-11h-7z",
+  gradient: "from-[#2E7D32] to-[#66BB6A]",
+  badge: null,
+},
+{
       href: "/company/settings",
       label: "Settings",
       desc: "Manage company details & buying rates",
@@ -201,7 +217,7 @@ export default function CompanyDashboard() {
             <span className="text-xs text-[#6C755D] font-medium">3 Actions Available</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {toolCards.map((item) => (
               <a
                 key={item.href}
