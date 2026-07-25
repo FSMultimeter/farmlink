@@ -2,48 +2,12 @@
 
 import { useRouter } from "next/navigation";
 
-function CloudLayer() {
-  const clouds = [
-    { top: 5, left: 8, scale: 0.8, duration: "24s" },
-    { top: 12, left: 35, scale: 1.1, duration: "32s" },
-    { top: 8, left: 68, scale: 0.9, duration: "28s" },
-    { top: 15, left: 85, scale: 0.75, duration: "36s" },
-  ];
-
-  return (
-    <div className="absolute inset-x-0 top-0 h-[40%] pointer-events-none overflow-hidden">
-      {clouds.map((cloud, i) => (
-        <div
-          key={i}
-          className="absolute animate-cloud-drift"
-          style={{
-            top: `${cloud.top}%`,
-            left: `${cloud.left}%`,
-            transform: `scale(${cloud.scale})`,
-            animationDuration: cloud.duration,
-          }}
-        >
-          <svg width="140" height="60" viewBox="0 0 140 60" fill="none">
-            <ellipse cx="45" cy="38" rx="34" ry="18" fill="#ffffff" opacity="0.85" />
-            <ellipse cx="75" cy="30" rx="30" ry="20" fill="#ffffff" opacity="0.9" />
-            <ellipse cx="100" cy="40" rx="26" ry="16" fill="#ffffff" opacity="0.8" />
-            <ellipse cx="65" cy="44" rx="40" ry="14" fill="#ffffff" />
-          </svg>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function SplashPage() {
   const router = useRouter();
 
   return (
     <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-[#1B3A1F] via-[#2E7D32] to-[#66BB6A]">
-      {/* Background Cloud Layer */}
-      <div className="absolute inset-0 pointer-events-none">
-        <CloudLayer />
-      </div>
+    
 
       {/* Main Content Card */}
       <div className="relative z-10 w-full max-w-md text-center animate-fade-slide-in">
@@ -87,13 +51,7 @@ export default function SplashPage() {
           from { opacity: 0; transform: translateY(24px) scale(0.98); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes cloudDrift {
-          0%, 100% { transform: translateX(0); }
-          50% { transform: translateX(18px); }
-        }
-        .animate-cloud-drift {
-          animation: cloudDrift infinite ease-in-out;
-        }
+        
       `}</style>
     </div>
   );
