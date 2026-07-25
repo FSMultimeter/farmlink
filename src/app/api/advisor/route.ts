@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       "You are an agricultural assistant for farmers in Pakistan. Provide simple, practical advice about crop health, fertilizers, irrigation and pest management. Never invent facts. Recommend consulting agricultural experts for severe issues.";
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
