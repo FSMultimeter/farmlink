@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import InteractiveWheatField from "@/components/InteractiveWheatField";
 
 function CloudLayer() {
   const clouds = [
@@ -160,24 +159,16 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-gradient-to-b from-[#FAF7F0] via-[#F4F8EC] to-[#DCEDC8]">
+    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-[#1B3A1F] via-[#2E7D32] to-[#66BB6A]">
       {/* Background Cloud Layer */}
       <div className="absolute inset-0 pointer-events-none">
         <CloudLayer />
       </div>
 
-      {/* Interactive Swaying & Mouse-Brushed Wheat Field */}
-      <InteractiveWheatField />
-
       {/* Register Card */}
       <div className="relative z-10 w-full max-w-md animate-fade-slide-in">
         <div className="bg-white/88 backdrop-blur-md border border-[#E0E6D0] rounded-3xl shadow-xl shadow-[#2E7D32]/10 p-8 sm:p-10">
           <div className="text-center mb-8">
-            <div className="mx-auto mb-4 w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2E7D32] to-[#4CAF50] flex items-center justify-center shadow-md shadow-[#2E7D32]/30 pulse-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18M5 8c0 5 3 9 7 9s7-4 7-9M5 8c2 0 4-1 5-3M19 8c-2 0-4-1-5-3" />
-              </svg>
-            </div>
             <h1 className="text-3xl font-extrabold text-[#243A1A] tracking-tight">Join FarmLink</h1>
             <p className="text-[#5A6C4D] text-sm mt-1 font-medium">Create an account to buy or sell crops</p>
           </div>
@@ -253,13 +244,6 @@ export default function RegisterPage() {
         @keyframes fadeSlideIn {
           from { opacity: 0; transform: translateY(24px) scale(0.98); }
           to { opacity: 1; transform: translateY(0); }
-        }
-        .pulse-icon {
-          animation: pulseIcon 2.5s ease-in-out infinite;
-        }
-        @keyframes pulseIcon {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.35); }
-          50% { box-shadow: 0 0 0 12px rgba(46, 125, 50, 0); }
         }
         .shake {
           animation: shake 0.4s ease-in-out;

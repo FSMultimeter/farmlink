@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import InteractiveWheatField from "@/components/InteractiveWheatField";
 
 function CloudLayer() {
   const clouds = [
@@ -40,24 +39,15 @@ export default function SplashPage() {
   const router = useRouter();
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-gradient-to-b from-[#FAF7F0] via-[#F4F8EC] to-[#DCEDC8]">
-      {/* Background Cloud and Animated Wheat Field Layers */}
+    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-[#1B3A1F] via-[#2E7D32] to-[#66BB6A]">
+      {/* Background Cloud Layer */}
       <div className="absolute inset-0 pointer-events-none">
         <CloudLayer />
       </div>
 
-      {/* Interactive Swaying & Mouse-Brushed Wheat Field */}
-      <InteractiveWheatField />
-
       {/* Main Content Card */}
       <div className="relative z-10 w-full max-w-md text-center animate-fade-slide-in">
         <div className="bg-white/85 backdrop-blur-md border border-[#E0E6D0] rounded-3xl shadow-xl shadow-[#2E7D32]/10 p-8 sm:p-10">
-          <div className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2E7D32] to-[#4CAF50] flex items-center justify-center shadow-lg shadow-[#2E7D32]/30 pulse-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-9 w-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18M5 8c0 5 3 9 7 9s7-4 7-9M5 8c2 0 4-1 5-3M19 8c-2 0-4-1-5-3" />
-            </svg>
-          </div>
-
           <h1 className="text-4xl font-extrabold tracking-tight text-[#243A1A] mb-2">
             FarmLink
           </h1>
@@ -96,13 +86,6 @@ export default function SplashPage() {
         @keyframes fadeSlideIn {
           from { opacity: 0; transform: translateY(24px) scale(0.98); }
           to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .pulse-icon {
-          animation: pulseIcon 2.5s ease-in-out infinite;
-        }
-        @keyframes pulseIcon {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.35); }
-          50% { box-shadow: 0 0 0 12px rgba(46, 125, 50, 0); }
         }
         @keyframes cloudDrift {
           0%, 100% { transform: translateX(0); }
