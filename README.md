@@ -190,16 +190,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ---
 
 ## Project Structure
+
+```
 src/app/
-page.tsx # Splash screen
-login/, register/ # Auth screens
-farmer/ # Farmer dashboard, add-crop, my-listings,
-# offers, ai-advisor, profile, settings
-company/ # Company dashboard, browse, crop/[id],
-# make-offer/[id], notifications, settings
-messages/ # Shared conversation list (live, per-role)
-chat/[chatId]/ # Individual real-time chat thread
-api/advisor/ # Secure server-side Gemini API routes
-lib/firebase.ts # Firebase initialization
+  page.tsx # Splash screen
+  login/, register/ # Auth screens
+  farmer/ # Farmer dashboard, add-crop, my-listings,
+                            # offers, ai-advisor, profile, settings
+  company/ # Company dashboard, browse, crop/[id],
+                            # make-offer/[id], notifications, settings
+  messages/ # Shared conversation list (live, per-role)
+  chat/[chatId]/ # Individual real-time chat thread
+  api/advisor/ # Secure server-side Gemini API routes
+  lib/firebase.ts # Firebase initialization
+```
 
 
