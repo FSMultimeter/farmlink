@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 
 interface Crop {
   cropName: string;
@@ -70,12 +71,20 @@ export default function CropDetailsPage() {
           <p className="text-gray-600">{crop.district}</p>
           <p className="text-2xl font-bold text-green-700 mt-3">PKR {crop.askingPrice}</p>
 
-          <a
-            href={`/company/make-offer/${id}`}
-            className="block text-center w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition mt-6"
-          >
-            Make Offer
-          </a>
+          <div className="flex gap-3 mt-6">
+            <a
+              href={`/company/make-offer/${id}`}
+              className="flex-1 text-center bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition"
+            >
+              Make Offer
+            </a>
+            <a
+              href={`/chat/${id}_${auth.currentUser?.uid}`}
+              className="flex-1 text-center bg-white border border-green-600 text-green-700 py-3 rounded-lg font-medium hover:bg-green-50 transition"
+            >
+              💬 Chat
+            </a>
+          </div>
         </div>
       </div>
     </div>

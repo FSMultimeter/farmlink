@@ -145,22 +145,30 @@ export default function OfferDetailsPage() {
                   </span>
                 </div>
 
-                {offer.status === "pending" && (
-                  <div className="flex gap-2 mt-3">
-                    <button
-                      onClick={() => respondToOffer(offer, "accepted")}
-                      className="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition"
-                    >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() => respondToOffer(offer, "rejected")}
-                      className="flex-1 bg-white border border-red-500 text-red-600 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition"
-                    >
-                      Reject
-                    </button>
-                  </div>
-                )}
+                <div className="flex gap-2 mt-3">
+                  {offer.status === "pending" && (
+                    <>
+                      <button
+                        onClick={() => respondToOffer(offer, "accepted")}
+                        className="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => respondToOffer(offer, "rejected")}
+                        className="flex-1 bg-white border border-red-500 text-red-600 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+                  <a
+                    href={`/chat/${offer.cropId}_${offer.companyId}`}
+                    className="flex-1 text-center bg-white border border-green-600 text-green-700 py-2 rounded-lg text-sm font-medium hover:bg-green-50 transition"
+                  >
+                    💬 Chat
+                  </a>
+                </div>
               </div>
             ))}
           </div>
