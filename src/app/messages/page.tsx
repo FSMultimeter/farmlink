@@ -10,7 +10,15 @@ interface ChatSummary {
   cropName: string;
   otherPartyName: string;
   lastMessageAt: string | null;
+  lastMessagePreview: string;
   isUnread: boolean;
+}
+
+function getPreview(text: string | undefined, wordCount = 4) {
+  if (!text) return "No messages yet";
+  const words = text.trim().split(/\s+/);
+  const preview = words.slice(0, wordCount).join(" ");
+  return words.length > wordCount ? `${preview}...` : preview;
 }
 
 export default function MessagesPage() {
@@ -53,6 +61,7 @@ export default function MessagesPage() {
           cropName: data.cropName || "Unknown crop",
           otherPartyName,
           lastMessageAt: data.lastMessageAt,
+          lastMessagePreview: getPreview(data.lastMessage),
           isUnread,
         });
       }
@@ -92,11 +101,30 @@ export default function MessagesPage() {
               <a
                 key={chat.id}
                 href={`/chat/${chat.id}`}
-                className="flex items-center justify-between bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition"
+                className={`flex items-center justify-between rounded-2xl shadow-md p-4 hover:shadow-lg transition ${
+                  chat.isUnread ? "bg-white border-l-4 border-green-600" : "bg-white"
+                }`}
               >
                 <div>
-                  <p className="font-bold text-green-800">{chat.otherPartyName}</p>
-                  <p className="text-sm text-gray-600">About: {chat.cropName}</p>
+                  <p
+                    className={
+                      chat.isUnread
+                        ? "font-bold text-green-900"
+                        : "font-medium text-gray-700"
+                    }
+                  >
+                    {chat.otherPartyName}
+                  </p>
+                  <p className="text-xs text-gray-500 mb-0.5">About: {chat.cropName}</p>
+                  <p
+                    className={
+                      chat.isUnread
+                        ? "font-bold text-green-800 text-sm"
+                        : "font-normal text-gray-500 text-sm"
+                    }
+                  >
+                    {chat.lastMessagePreview}
+                  </p>
                 </div>
                 {chat.isUnread && (
                   <span className="w-3 h-3 rounded-full bg-red-500 flex-shrink-0" />
