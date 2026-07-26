@@ -31,7 +31,8 @@ Anyone can open this link, register as a Farmer or a Company, and use the full a
 - **Add Crop** — list a crop for sale with name, quantity, district, asking price, and a photo upload (stored in Firebase Storage)
 - **My Listings** — view all crops the farmer has listed, with live status (available/sold)
 - **Offers Received** — view every offer made on their crops and Accept or Reject each one; responding automatically notifies the company
-- **AI Crop Advisor** — a chat interface for asking questions about crop health, fertilizers, irrigation, and pest management, and for getting help using the app itself
+- **Messages** — real-time chat with companies about a specific crop; the conversation list bolds unread chats with a live preview of the last message and a red dot, and updates instantly (via Firestore listeners) without needing a page reload
+- **AI Crop Advisor** — a chat interface for asking questions about crop health, fertilizers, irrigation, and pest management (see AI Feature section below)
 - **Profile** — view and edit name, phone, and district
 - **Settings** — manage account preferences
 
@@ -40,18 +41,19 @@ Anyone can open this link, register as a Farmer or a Company, and use the full a
 - **Browse Crops** — search and filter all available crop listings by crop name and district
 - **Crop Details** — full listing view with photo, quantity, district, and asking price
 - **Make Offer** — submit a price offer on any crop listing
-- **AI Procurement Advisor** — a chat interface for sourcing/pricing guidance and app help
+- **Messages** — real-time chat with farmers about a specific crop, same live unread/read behavior as the farmer side
+- **AI Advisor** — a company-facing chat advisor for market and negotiation guidance
 - **Notifications** — see when an offer is accepted or rejected, marked read/unread
 - **Settings** — manage company name, phone, and buying-rate notes
 
 ### Data model
-Six Firestore collections power the app: `Users`, `Crops`, `Offers`, `Notifications`, `AIHistory`, plus Firebase Storage for crop photos. Firestore security rules restrict reads/writes to authenticated users and enforce that a document's owner ID matches the logged-in user before allowing creation.
+Seven Firestore collections power the app: `Users`, `Crops`, `Offers`, `Notifications`, `AIHistory`, `Chats` (with a `Messages` subcollection for each conversation), plus Firebase Storage for crop photos. Firestore security rules restrict reads/writes to authenticated users and enforce that a document's owner ID matches the logged-in user before allowing creation.
 
 ---
 
 ## The AI Feature
 
-FarmLink includes two AI advisors — one for Farmers, one for Companies — each a chat interface backed by its own secure Next.js API route (so the Gemini API key never reaches the browser). Every question is sent to Google's Gemini model along with a fixed system prompt, and every exchange is logged to the `AIHistory` collection in Firestore.
+FarmLink includes an **AI Crop/Market Advisor**, available to both Farmer and Company accounts as a chat interface. Questions are sent to a secure Next.js API route (so the API key never reaches the browser), which forwards them to Google's Gemini model along with a fixed system prompt, then returns the answer to the chat UI. Every exchange is also logged to the `AIHistory` collection in Firestore.
 
 **System prompt used for the Farmer AI Advisor:**
 You are FarmLink's AI Crop Advisor, helping farmers in Pakistan make better decisions about their crops and use the FarmLink app effectively.
@@ -92,7 +94,7 @@ If a question is unrelated to procurement, crops, or the app, gently redirect ba
 If the question is in Urdu or Roman Urdu, respond in the same language style used.
 Keep every response professional, respectful, and clear.
 
-This keeps both advisors scoped to their actual jobs, explicitly forbids inventing facts or prices, requires severe issues to be escalated to a real expert, and matches the user's language style (English, Urdu, or Roman Urdu) automatically.
+This keeps the AI scoped to its actual job (farming and procurement guidance) and explicitly instructs it not to fabricate information — important since the advice touches people's livelihoods.
 
 ---
 
@@ -121,32 +123,43 @@ This keeps both advisors scoped to their actual jobs, explicitly forbids inventi
 
 
 
-![farmer-dashboard](./screenshots/farmer-dashboard.png)
+![Farmer Dashboard](./screenshots/farmer-dashboard.png)
 
 
 
 
-![company-dashboard](./screenshots/company-dashboard.png)
+![Company Dashboard](./screenshots/company-dashboard.png)
 
 
 
 
-![ai-advisor](./screenshots/ai-advisor.png)
+![Add Crop](./screenshots/add-crop.png)
 
 
 
 
-![add-crop](./screenshots/add-crop.png)
+![Offers (Company side)](./screenshots/offers.png)
 
 
 
 
-![offers](./screenshots/offers.png)
+![Offers Received (Farmer side)](./screenshots/offers-received.png)
 
 
 
 
-![company-notifications](./screenshots/company-notifications.png)
+![Chat Screen](./screenshots/chat.png)
+
+
+
+
+![Company Notifications](./screenshots/company-notifications.png)
+
+
+
+
+![AI Advisor](./screenshots/ai-advisor.png)
+
 
 
 
@@ -157,14 +170,13 @@ This keeps both advisors scoped to their actual jobs, explicitly forbids inventi
 **Prerequisites:** Node.js (LTS) and a Firebase project with Authentication, Firestore, and Storage enabled, plus a Gemini API key.
 
 1. **Clone the repository**
-
 git clone https://github.com/FSMultimeter/farmlink.git
 cd farmlink
 
 2. **Install dependencies**
+npm install
 
 3. **Create a `.env.local` file** in the project root with your own keys (never commit this file):
-
 NEXT_PUBLIC_FIREBASE_API_KEY=your_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
@@ -174,6 +186,8 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 GEMINI_API_KEY=your_gemini_key
 
 4. **Run the development server**
+npm run dev
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 5. **Deploying:** the project is deployed on Vercel — connect the GitHub repo to a Vercel project and add the same environment variables in the Vercel dashboard under Project Settings → Environment Variables.
@@ -188,5 +202,9 @@ farmer/ # Farmer dashboard, add-crop, my-listings,
 # offers, ai-advisor, profile, settings
 company/ # Company dashboard, browse, crop/[id],
 # make-offer/[id], notifications, settings
+messages/ # Shared conversation list (live, per-role)
+chat/[chatId]/ # Individual real-time chat thread
 api/advisor/ # Secure server-side Gemini API routes
 lib/firebase.ts # Firebase initialization
+
+
