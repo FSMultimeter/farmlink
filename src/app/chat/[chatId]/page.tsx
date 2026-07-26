@@ -75,6 +75,7 @@ export default function ChatPage() {
           companyId,
           farmerId,
           cropName: resolvedCropName,
+          lastMessage: "",
           lastMessageAt: null,
           lastReadFarmerAt: null,
           lastReadCompanyAt: null,
@@ -129,6 +130,7 @@ export default function ChatPage() {
 
     const now = new Date().toISOString();
     await updateDoc(doc(db, "Chats", chatId), {
+      lastMessage: text,
       lastMessageAt: now,
       [myRole === "farmer" ? "lastReadFarmerAt" : "lastReadCompanyAt"]: now,
     });
