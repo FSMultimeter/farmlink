@@ -138,12 +138,7 @@ This keeps the AI scoped to its actual job (farming and procurement guidance) an
 
 
 
-![Offers (Company side)](./screenshots/offers.png)
-
-
-
-
-![Offers Received (Farmer side)](./screenshots/offers-received.png)
+![Offers Received](./screenshots/offers-received.png)
 
 
 
